@@ -17,6 +17,17 @@ export default function Button({ title, type = 'PRIMARY', style, ...rest }: Prop
     // </Container>
 
     <TouchableOpacity
+      // style={[ // ver se vai funcionar
+      //   {
+      //     flex: 1,
+      //     minHeight: 56,
+      //     maxHeight: 56,
+      //     borderRadius: 6,
+      //     justifyContent: 'center',
+      //     alignItems: 'center',
+      //     backgroundColor: type === 'PRIMARY' ? theme.COLORS.GREEN_700 : theme.COLORS.RED_DARK,
+      //   }, style
+      // ]}
       style={{
         flex: 1,
         minHeight: 56,

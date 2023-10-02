@@ -1,7 +1,7 @@
 import Loading from "@components/LoaderScreen";
 import { Roboto_400Regular, Roboto_700Bold, useFonts } from "@expo-google-fonts/roboto";
 import Players from "@screens/Players";
-import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components";
 import theme from './src/theme/index';
 
@@ -16,7 +16,6 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <StatusBar
         backgroundColor={`transparent`}
-        style="inverted"
         translucent
       />
       {/* {fontsLoaded ? <Groups /> : <Loading />} */}
