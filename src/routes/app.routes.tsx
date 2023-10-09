@@ -9,7 +9,7 @@ export default function AppRoutes() {
   return (
     <Navigator screenOptions={{ headerShown: false }}>
       <Screen name="Groups" component={Groups} />
-      <Screen name="NewGroups" component={NewGroup} />
+      <Screen name="NewGroup" component={NewGroup} />
       <Screen name="Players" component={Players} />
     </Navigator>
   );
