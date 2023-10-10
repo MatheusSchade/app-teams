@@ -9,11 +9,11 @@ import PlayerCard from "@components/PlayerCard"
 import { useRoute } from "@react-navigation/native"
 import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO"
 import { addPlayerByGroup } from "@storage/player/addPlayerByGroup"
-import { getAllPlayersByGroup } from "@storage/player/getAllPlayersByGroup"
 import { getPlayerByGroupAndTeam } from "@storage/player/getPlayerByGroupAndTeam"
+import { removePlayerByGroup } from "@storage/player/removePlayerByGroup"
 import { CustomError } from "@utils/CustomError"
-import { useEffect, useState } from "react"
-import { Alert, FlatList } from "react-native"
+import { useEffect, useRef, useState } from "react"
+import { Alert, FlatList, TextInput } from "react-native"
 import * as S from "./styles"
 
 interface RouteParams {
@@ -26,6 +26,7 @@ export default function Players() {
   const [newPlayerName, setNewPlayerName] = useState('');
 
   const { params } = useRoute()
+  const newPlayerNameInputRef = useRef<TextInput>(null)
 
   async function handleAddPlayer() {
     if (newPlayerName?.trim().length === 0) {
@@ -41,8 +42,9 @@ export default function Players() {
 
     try {
       await addPlayerByGroup(newPlayer, group);
+      setNewPlayerName('')
+      newPlayerNameInputRef.current?.blur(); // tira o foco do input
       fetchPlayersByTeam()
-      const players = await getAllPlayersByGroup(group);
 
     } catch (error: any) {
       if (error instanceof CustomError) {
@@ -67,6 +69,18 @@ export default function Players() {
     }
   }
 
+  async function handleRemovePlayer(playerName: string) {
+    try {
+      const group = (params as RouteParams)?.group;
+      await removePlayerByGroup(playerName, group);
+      fetchPlayersByTeam()
+
+    } catch (error: any) {
+      console.log(error)
+      Alert.alert("Remover pessoa", `Não foi possível remover a pessoa selecionada`);
+    }
+  }
+
   useEffect(() => {
     fetchPlayersByTeam()
   }, [team])
@@ -86,6 +100,9 @@ export default function Players() {
           autoCorrect={false}
           value={newPlayerName}
           onChangeText={setNewPlayerName}
+          inputRef={newPlayerNameInputRef}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done" // serve para o botão de V do teclado do android dar um submit na função acima, sem que o user precise ir no ícone de +
         />
 
         <ButtonIcon onPress={handleAddPlayer} type="PRIMARY" icon="add" />
@@ -120,7 +137,7 @@ export default function Players() {
         keyExtractor={item => item?.name}
         renderItem={({ item }) => (
           <PlayerCard
-            onRemove={() => { }}
+            onRemove={() => handleRemovePlayer(item?.name)}
             name={item?.name}
           />
         )}

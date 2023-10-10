@@ -35,8 +35,6 @@ export default function Groups() {
     fetchGroups()
   }, []));
 
-  console.log('groups', groups)
-
   return (
     <S.Container>
       <Header />
